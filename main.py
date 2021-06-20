@@ -39,15 +39,88 @@ class Paint(QMainWindow):
         # Добавление справки
         infoMenu = mainMenu.addMenu("Справка")
 
-        # Установка размера кисти
+        # Возможность выбора разной толщины кисти
         pix = QAction("4px", self)
         b_size.addAction(pix)
         pix.triggered.connect(self.Pixel_4)
 
-        # Установка цвета кисти
+        pix_8 = QAction("8px", self)
+        b_size.addAction(pix_8)
+        pix_8.triggered.connect(self.Pixel_8)
+
+        pix_12 = QAction("12px", self)
+        b_size.addAction(pix_12)
+        pix_12.triggered.connect(self.Pixel_12)
+
+        pix_14 = QAction("14px", self)
+        b_size.addAction(pix_14)
+        pix_14.triggered.connect(self.Pixel_14)
+
+        pix_16 = QAction("16px", self)
+        b_size.addAction(pix_16)
+        pix_16.triggered.connect(self.Pixel_16)
+
+        pix_32 = QAction("32px", self)
+        b_size.addAction(pix_32)
+        pix_32.triggered.connect(self.Pixel_32)
+
+        pix_64 = QAction("64px", self)
+        b_size.addAction(pix_64)
+        pix_64.triggered.connect(self.Pixel_64)
+
+        pix_72 = QAction("72px", self)
+        b_size.addAction(pix_72)
+        pix_72.triggered.connect(self.Pixel_72)
+
+        #Выборка различных цветов кисти
         black = QAction("Чёрный", self)
         b_color.addAction(black)
         black.triggered.connect(self.blackColor)
+
+        yellow = QAction("Жёлтый", self)
+        b_color.addAction(yellow)
+        yellow.triggered.connect(self.yellowColor)
+
+        red = QAction("Красный", self)
+        b_color.addAction(red)
+        red.triggered.connect(self.redColor)
+
+        white = QAction("Белый", self)
+        b_color.addAction(white)
+        white.triggered.connect(self.whiteColor)
+
+        green = QAction("Зеленый", self)
+        b_color.addAction(green)
+        green.triggered.connect(self.greenColor)
+
+        # Добавляем О нас
+        aboutAction = QAction("О нас", self)
+        # Добавляем подраздел "О нас" в меню Справка
+        infoMenu.addAction(aboutAction)
+        # Шорткат
+        aboutAction.setShortcut("Ctrl+I")
+        # Когда мы нажимаем на Справка->О нас, триггерится функция about
+        aboutAction.triggered.connect(self.about)
+
+        # Создание опции "Сохранить"
+        saveAction = QAction("Сохранить как...", self)
+        saveAction.setShortcut("Ctrl + S")
+        fileMenu.addAction(saveAction)
+        saveAction.triggered.connect(self.save)
+
+        # Очистка
+        clearAction = QAction("Очистить", self)
+        clearAction.setShortcut("Ctrl + C")
+        fileMenu.addAction(clearAction)
+        clearAction.triggered.connect(self.clear)
+
+        #Выход
+        exitAction = QAction("Выход", self)
+        exitAction.setShortcut("Ctrl+Q")
+        fileMenu.addAction(exitAction)
+        exitAction.triggered.connect(self.exitProgram)
+
+        # Создание опции приближения
 
     # Проверка нажатия на левую кнопку мыши и установка позиции курсора, если нажаите произошло
     def mousePressEvent(self, event):
@@ -85,6 +158,15 @@ class Paint(QMainWindow):
         else:
             event.ignore()
 
+    # Функция, сохраняющая изображение
+    def save(self):
+        filePath, _ = QFileDialog.getSaveFileName(self, "Сохранить", "",
+                                                  "PNG(*.png);;JPEG(*.jpg *.jpeg);;Монохромный рисунок(*.bmp *.dib);;"
+                                                  "TIFF(*.tif *.tiff);;All Files(*.*) ")
+        if filePath == "":
+            return
+        self.image.save(filePath)
+
     # Функция, центрирующая окно на рабочем столе
     def center(self):
 
@@ -93,11 +175,59 @@ class Paint(QMainWindow):
         place.moveCenter(monitor_size)
         self.move(place.topLeft())
 
-    def Pixel_4(self):
-        self.brushSize = 4
+    # Очистка всего поля
+    def clear(self):
+        self.image.fill(Qt.white)
+        self.update()
+
+    def about(self):
+        msg = QMessageBox()
+        msg.setText("<p>Над программой работали: Беличенко Дарья, Строкач Никита</p>"
+                    "<p>БСБО-04-19</p>")
+        msg.setWindowTitle("О нас")
+        msg.exec_()
+
+    def exitProgram(self):
+        QtCore.QCoreApplication.quit()
 
     def blackColor(self):
         self.brushColor = Qt.black
+
+    def yellowColor(self):
+        self.brushColor = Qt.yellow
+
+    def redColor(self):
+        self.brushColor = Qt.red
+
+    def whiteColor(self):
+        self.brushColor = Qt.white
+
+    def greenColor(self):
+        self.brushColor = Qt.green
+
+    def Pixel_4(self):
+        self.brushSize = 4
+
+    def Pixel_8(self):
+        self.brushSize = 8
+
+    def Pixel_12(self):
+        self.brushSize = 12
+
+    def Pixel_14(self):
+        self.brushSize = 14
+
+    def Pixel_16(self):
+        self.brushSize = 16
+
+    def Pixel_32(self):
+        self.brushSize = 32
+
+    def Pixel_64(self):
+        self.brushSize = 64
+
+    def Pixel_72(self):
+        self.brushSize = 72
 
 # Создание pyQt5 app
 App = QApplication(sys.argv)
